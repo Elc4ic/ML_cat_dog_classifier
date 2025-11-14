@@ -1,0 +1,8 @@
+.gradle
+build/
+/neuron/
+/.idea/
+/src/main/resources/dataset/test_set/
+/src/main/resources/dataset/training_set/
+/.idea/
+/.kotlin/
