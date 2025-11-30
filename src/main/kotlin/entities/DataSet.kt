@@ -1,22 +1,29 @@
-package org.example
+package org.example.entities
 
+import java.awt.Image
 import java.awt.image.BufferedImage
 import java.io.File
 import javax.imageio.ImageIO
 
-class PngDataSet(path: String, start: Int, end: Int, resolution: Int = 64) {
+class DataSet(file: File, resolution: Int = 64) {
+
+    var fileC = file.listFiles().first { file -> file.name.contains("cats") }
+    var fileD = file.listFiles().first { file -> file.name.contains("dogs") }
+
+    var fileListC = fileC.listFiles() ?: emptyArray<File>()
+    var fileListD = fileD.listFiles() ?: emptyArray<File>()
     var cats =
-        Array<Pair<FloatArray, FloatArray>?>(end - start + 1) {
-            createPair(
-                "$path\\cats\\cat.${start + it}.png",
+        Array<Pair<FloatArray, FloatArray>?>(fileListC.size) {
+            ImageUtils.createPair(
+                fileListC[it],
                 0f,
                 resolution
             )
         }
     var dogs =
-        Array<Pair<FloatArray, FloatArray>?>(end - start + 1) {
-            createPair(
-                "$path\\dogs\\dog.${start + it}.png",
+        Array<Pair<FloatArray, FloatArray>?>(fileListD.size) {
+            ImageUtils.createPair(
+                fileListD[it],
                 1f,
                 resolution
             )
@@ -33,15 +40,18 @@ class PngDataSet(path: String, start: Int, end: Int, resolution: Int = 64) {
     fun getAll(): Array<Pair<FloatArray, FloatArray>?> {
         return cats + dogs
     }
+}
 
-    fun createPair(path: String, res: Float, resolution: Int): Pair<FloatArray, FloatArray> {
-        val imgFile = File(path)
+object DataSetUtils {
 
-        val img = ImageIO.read(imgFile)
+}
 
+object ImageUtils {
+    fun resizeImage(file: File, resolution: Int): FloatArray {
+        val img = ImageIO.read(file)
         val W = resolution
         val H = resolution
-        val resized = img.getScaledInstance(W, H, java.awt.Image.SCALE_SMOOTH)
+        val resized = img.getScaledInstance(W, H, Image.SCALE_SMOOTH)
         val grayImg = BufferedImage(W, H, BufferedImage.TYPE_BYTE_GRAY)
         val g = grayImg.createGraphics()
         g.drawImage(resized, 0, 0, null)
@@ -55,7 +65,11 @@ class PngDataSet(path: String, start: Int, end: Int, resolution: Int = 64) {
                 floats[idx++] = gray / 255f
             }
         }
+        return floats
+    }
 
+    fun createPair(imgFile: File, res: Float, resolution: Int): Pair<FloatArray, FloatArray> {
+        val floats = resizeImage(imgFile, resolution)
         return floats to floatArrayOf(res)
     }
 }

@@ -1,4 +1,4 @@
-package org.example
+package org.example.ai
 
 import java.io.File
 
@@ -69,7 +69,6 @@ class NeuralNetwork(var inputSize: Int = 64 * 64, val lr: Float = 0.01f) {
             } else if (line.startsWith(layerSuf)) {
                 layerTemp?.let {
                     layers.add(it)
-                    println("${it.name} ${it.size} ${it.f} ${it.neurons.first().bias}")
                 }
                 val property = line.split(":").last().split(" ")
                 val name = property[0]

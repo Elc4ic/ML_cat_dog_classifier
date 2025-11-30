@@ -1,4 +1,4 @@
-package org.example
+package org.example.ai
 
 import java.awt.Color
 import java.awt.Graphics2D

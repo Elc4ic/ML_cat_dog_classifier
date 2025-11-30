@@ -1,4 +1,4 @@
-package org.example
+package org.example.ai
 
 import kotlin.math.exp
 import kotlin.math.max

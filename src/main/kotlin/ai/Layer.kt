@@ -1,6 +1,4 @@
-package org.example
-
-import java.io.File
+package org.example.ai
 
 data class LayerGradients(val neuronGradients: List<NeuronGradients>)
 class Layer(val size: Int, val name: String,val f: Function) {
@@ -33,4 +31,5 @@ class Layer(val size: Int, val name: String,val f: Function) {
             neurons[i].applyGradients(gradients.neuronGradients[i], lr)
         }
     }
+
 }
